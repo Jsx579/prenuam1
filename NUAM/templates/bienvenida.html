@@ -1,0 +1,351 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Inicio - NUAM</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar con búsqueda y logout -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            
+            <!-- Botón hamburguesa para móvil -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Buscador -->
+                <form class="d-flex mx-auto" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
+                    <button class="btn btn-light" type="submit">Buscar</button>
+                </form>
+
+                <!-- Usuario y Logout / Login -->
+                <div class="d-flex align-items-center ms-lg-3 gap-2">
+                    {% if user.is_authenticated %}
+                        <!-- Usuario logueado -->
+                        <span class="navbar-text me-2 text-white">
+                            Hola, <strong>{{ user.username }}</strong>
+                            {% if user.groups.all %}
+                                <span class="badge bg-warning text-dark ms-1">
+                                    {{ user.groups.first.name }}
+                                </span>
+                            {% endif %}
+                        </span>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">
+                                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                            </button>
+                        </form>
+                    {% else %}
+                        <!-- Dropdown para diferentes tipos de inicio de sesión -->
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="dropdownLogin" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{% static 'Prototipo/svg/mdi--account.svg' %}" alt="" width="18" height="18" style="filter: brightness(0) invert(1); vertical-align: middle; margin-right: 4px;">
+                                Iniciar Sesión
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLogin">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'InicioSesion' %}">
+                                        <img src="{% static 'Prototipo/svg/mdi--account.svg' %}" alt="" width="18" height="18" style="vertical-align: middle; margin-right: 8px;">
+                                        Usuario Regular
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'InicioSesionAuditor' %}">
+                                        <img src="{% static 'Prototipo/svg/mdi--account-child-outline.svg' %}" alt="" width="18" height="18" style="vertical-align: middle; margin-right: 8px;">
+                                        Auditor
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section - Bienvenida -->
+    <div class="bg-white py-5 shadow-sm">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold text-primary mb-3">Bienvenido a NUAM</h1>
+                    <p class="lead text-muted mb-4">
+                        Sistema integral de gestión para el mercado de valores latinoamericano. 
+                        Acceda a herramientas avanzadas para la administración tributaria y operaciones financieras.
+                    </p>
+                    {% if user.is_authenticated %}
+                    <div class="alert alert-success border-0 shadow-sm" role="alert">
+                        <i class="bi bi-check-circle-fill"></i> 
+                        <strong>Sesión activa:</strong> {{ user.username }} - {{ user.email }}
+                        {% if user.groups.all %}
+                            <br><small><strong>Rol:</strong> {{ user.groups.first.name }}</small>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-lg-4 text-center">
+                    <img src="{% static 'Prototipo/img/nuam_HD.png' %}" alt="NUAM Logo" class="img-fluid" style="max-width: 250px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menú de Navegación Rápida -->
+    <div class="container my-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-primary mb-2">Menú de Navegación</h2>
+            <p class="text-muted">Seleccione una opción para acceder a las diferentes secciones del sistema</p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <!-- Card Calificaciones Tributarias -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'Clasificacion' %}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <div class="icon-circle bg-primary bg-opacity-10 mx-auto">
+                                    <i class="bi bi-calculator fs-1 text-primary"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">Calificaciones Tributarias</h5>
+                            <p class="card-text text-muted small">
+                                Gestión y consulta de calificaciones del mercado
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card Cargar Archivo -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'CargaArchivo' %}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <div class="icon-circle bg-success bg-opacity-10 mx-auto">
+                                    <i class="bi bi-file-earmark-arrow-up fs-1 text-success"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">Cargar Archivo</h5>
+                            <p class="card-text text-muted small">
+                                Carga masiva de archivos X Factor
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card Clasificaciones Detalle -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'ClasificacionesTributarias' %}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <div class="icon-circle bg-info bg-opacity-10 mx-auto">
+                                    <i class="bi bi-table fs-1 text-info"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">Clasificaciones Detalle</h5>
+                            <p class="card-text text-muted small">
+                                Vista detallada de clasificaciones tributarias
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card Ingreso Clasificaciones -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'IngresoCalificacionesTributarias' %}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <div class="icon-circle bg-danger bg-opacity-10 mx-auto">
+                                    <i class="bi bi-plus-circle fs-1 text-danger"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">Ingreso de Clasificaciones</h5>
+                            <p class="card-text text-muted small">
+                                Ingreso de las clasificaciones tributarias
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card visualización Clasificaciones -->
+             <div class="col-md-6 col-lg-3">
+                <a href="{% url 'VisualizarTributaria' %}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <div class="icon-circle bg-danger bg-opacity-10 mx-auto">
+                                    <i class="bi bi-plus-circle fs-1 text-danger"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">Visualización de Clasificaciones</h5>
+                            <p class="card-text text-muted small">
+                                Visualización de las clasificaciones tributarias
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'ModificarClasificaciones' %}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <div class="icon-circle bg-info bg-opacity-10 mx-auto">
+                                    <i class="bi bi-table fs-1 text-info"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">Modificar Clasificacion Tributaria</h5>
+                            <p class="card-text text-muted small">
+                                Modificación de clasificaciones tributarias
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+            <!-- Card Formato de Archivo -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'FormatoArchivo' %}" class="text-decoration-none" target="_blank">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <div class="icon-circle bg-secondary bg-opacity-10 mx-auto">
+                                    <i class="bi bi-file-earmark-spreadsheet fs-1 text-secondary"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">Formato de Archivo</h5>
+                            <p class="card-text text-muted small">
+                                Especificación de campos para carga masiva
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card Reportes -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'Reportes' %}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <div class="icon-circle bg-warning bg-opacity-10 mx-auto">
+                                    <i class="bi bi-graph-up fs-1 text-warning"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">Reportes</h5>
+                            <p class="card-text text-muted small">
+                                Generación de reportes y estadísticas
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN DE INFORMACIÓN - Cards informativas -->
+    <div class="bg-white py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-primary mb-2">Sobre NUAM</h2>
+                <p class="text-muted">Conoce más sobre nuestra plataforma y objetivos</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- CARD 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="{% static 'Prototipo/img/nuam_HD.png' %}" class="card-img-top p-4" alt="Imagen NUAM" style="max-height: 250px; object-fit: contain;">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary">¿Qué es NUAM?</h5>
+                            <p class="card-text text-muted">
+                                Holding Regional que integra las bolsas de valores de Santiago (Chile), Lima (Perú) y Colombia en un único mercado,
+                                creando una plataforma común con el objetivo de desarrollar la economía de la región y generar más oportunidades para inversionistas, empresas e intermediarios financieros.
+                            </p>
+                            <a href="https://www.nuam.com/" target="_blank" class="btn btn-primary">
+                                <i class="bi bi-arrow-right"></i> Conocer más
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="{% static 'Prototipo/img/xd.jpg' %}" class="card-img-top" alt="Cómo funciona" style="max-height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary">¿Cómo funciona?</h5>
+                            <p class="card-text text-muted">
+                                Nuam opera como una holding que posee las filiales de las bolsas de valores de estos países, incluyendo los depósitos de valores y las cámaras de compensación y liquidación. 
+                                A través de una plataforma tecnológica unificada, los inversores podrán acceder a un mercado más grande.
+                            </p>
+                            <a href="https://www.youtube.com/watch?v=JdrZCtu9Mtc&t=12s" class="btn btn-primary" target="_blank">
+                                <i class="bi bi-play-circle"></i> Ver video
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="{% static 'Prototipo/img/objetivos.jpeg' %}" class="card-img-top" alt="Objetivos" style="max-height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary">Nuestros objetivos</h5>
+                            <p class="card-text text-muted">
+                                <strong>Integrar mercados:</strong> Unificar las bolsas de tres países.<br>
+                                <strong>Impulsar la economía:</strong> Potenciar el crecimiento regional.<br>
+                                <strong>Beneficiar a los participantes:</strong> Ofrecer mayor diversificación y oportunidades.
+                            </p>
+                            <a href="#" class="btn btn-primary">
+                                <i class="bi bi-info-circle"></i> Más información
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-4 mt-5">
+        <div class="container">
+            <ul class="nav justify-content-center mb-3">
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

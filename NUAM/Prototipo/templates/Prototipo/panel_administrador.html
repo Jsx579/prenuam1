@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Panel de Administrador - Gestión de Usuarios</title>
+    <style>
+        body { padding-top: 20px; }
+        .panel-header { margin-bottom: 30px; }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="panel-header">
+            <h1 class="text-danger">⚙️ Panel de Administrador</h1>
+            
+            <p class="lead">Bienvenido/a, <strong>{{ request.user.nombre|default:"Administrador" }}</strong>. Gestión de Usuarios del Sistema.</p>
+            
+            
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                
+                <a href="{% url 'UsuarioCrear' %}" class="btn btn-success">
+                    <i class="bi bi-person-plus"></i> Crear Nuevo Usuario
+                </a>
+
+                <div class="d-flex gap-2">
+                    
+                    <form method="GET" action="{% url 'PanelAdministrador' %}" class="d-flex">
+                        
+                        {% if filtro_rol_activo and filtro_rol_activo != 'Todos' %}
+                            <input type="hidden" name="rol" value="{{ filtro_rol_activo }}">
+                        {% endif %}
+                        
+                        <input type="text" 
+                               name="q" 
+                               class="form-control me-2" 
+                               style="width: 250px;"
+                               placeholder="Buscar por Nombre o Email..."
+                               value="{{ busqueda_texto_activo }}">
+                        
+                        <button type="submit" class="btn btn-info">Buscar</button>
+                        
+                        {% if busqueda_texto_activo or filtro_rol_activo %}
+                            <a href="{% url 'PanelAdministrador' %}" class="btn btn-outline-secondary ms-2">Limpiar Filtros</a>
+                        {% endif %}
+                    </form>
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Rol: {% if filtro_rol_activo %}{{ filtro_rol_activo }}{% else %}Todos{% endif %}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'PanelAdministrador' %}?q={{ busqueda_texto_activo|urlencode }}">Todos los Roles</a></li>
+                            
+                            {% for rol in roles_disponibles %}
+                            <li><a class="dropdown-item {% if filtro_rol_activo == rol %}active{% endif %}" href="{% url 'PanelAdministrador' %}?rol={{ rol }}&q={{ busqueda_texto_activo|urlencode }}">{{ rol }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <a href="{% url 'CerrarSesion' %}" class="btn btn-outline-danger">
+                        Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+            </div>
+
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Fecha Reg.</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.pk }}</td> 
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.rol.nombre|default:"Sin Rol" }}</td> 
+                        <td>{{ usuario.fecha_reg|date:"Y-m-d" }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'UsuarioEditar' usuario.pk %}" class="btn btn-sm btn-primary me-2">
+                                Editar
+                            </a>
+                            
+                            <form method="post" action="{% url 'UsuarioEliminar' usuario.pk %}" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar al usuario {{ usuario.nombre }}?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No se encontraron usuarios que coincidan con los filtros.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

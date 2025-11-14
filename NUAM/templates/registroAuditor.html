@@ -1,0 +1,371 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Registro de Auditor - NUAM</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark auditor-header shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+                <span><i class="bi bi-shield-check"></i> Auditor</span>
+            </a>
+            <form class="d-flex ms-auto" role="search">
+                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
+                <button class="btn btn-light" type="submit">Buscar</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh; padding: 2rem 0;">
+            <div class="col-md-6 col-lg-5">
+                <!-- Card del formulario -->
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5">
+                        <!-- Logo/Título -->
+                        <div class="text-center mb-4">
+                            <div class="mb-3">
+                                <span class="auditor-badge">
+                                    <i class="bi bi-shield-check fs-4"></i>
+                                    <span>Registro Auditor</span>
+                                </span>
+                            </div>
+                            <h1 class="display-5 fw-bold text-warning mb-2">NUAM</h1>
+                            <p class="text-muted">Solicitud de cuenta de auditor</p>
+                        </div>
+
+                        <!-- Alerta informativa -->
+                        <div class="alert alert-warning border-0 mb-4" role="alert">
+                            <i class="bi bi-info-circle"></i> 
+                            <small><strong>Nota:</strong> El registro de auditores requiere aprobación administrativa.</small>
+                        </div>
+
+                        <!-- Mensajes de error/éxito -->
+                        {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <!-- Formulario de registro -->
+                        <form method="post" id="registroAuditorForm" novalidate>
+                            {% csrf_token %}
+                            
+                            <!-- Nombre de usuario -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-semibold">
+                                    <i class="bi bi-person-badge"></i> ID de Auditor
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="username"
+                                    class="form-control form-control-lg {% if form.username.errors %}is-invalid{% endif %}" 
+                                    id="username"
+                                    placeholder="ID único de auditor"
+                                    value="{{ form.username.value|default:'' }}"
+                                    required
+                                >
+                                {% if form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.username.errors.0 }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-semibold">
+                                    <i class="bi bi-envelope"></i> Correo corporativo
+                                </label>
+                                <input 
+                                    type="email" 
+                                    name="email"
+                                    class="form-control form-control-lg {% if form.email.errors %}is-invalid{% endif %}" 
+                                    id="email"
+                                    placeholder="auditor@empresa.com"
+                                    value="{{ form.email.value|default:'' }}"
+                                    required
+                                >
+                                {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.email.errors.0 }}
+                                </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    Debe ser un correo corporativo válido
+                                </div>
+                            </div>
+
+                            <!-- Nombre completo -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-6">
+                                    <label for="first_name" class="form-label fw-semibold">
+                                        <i class="bi bi-person"></i> Nombre
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        name="first_name"
+                                        class="form-control form-control-lg" 
+                                        id="first_name"
+                                        placeholder="Nombre"
+                                        value="{{ form.first_name.value|default:'' }}"
+                                        required
+                                    >
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="last_name" class="form-label fw-semibold">
+                                        <i class="bi bi-person"></i> Apellido
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        name="last_name"
+                                        class="form-control form-control-lg" 
+                                        id="last_name"
+                                        placeholder="Apellido"
+                                        value="{{ form.last_name.value|default:'' }}"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Número de licencia o certificación -->
+                            <div class="mb-3">
+                                <label for="licencia" class="form-label fw-semibold">
+                                    <i class="bi bi-award"></i> Número de Licencia/Certificación
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="licencia"
+                                    class="form-control form-control-lg" 
+                                    id="licencia"
+                                    placeholder="Ej: AUD-12345"
+                                    required
+                                >
+                                <div class="form-text">
+                                    Número de certificación profesional de auditoría
+                                </div>
+                            </div>
+
+                            <!-- Empresa/Organización -->
+                            <div class="mb-3">
+                                <label for="empresa" class="form-label fw-semibold">
+                                    <i class="bi bi-building"></i> Empresa/Organización
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="empresa"
+                                    class="form-control form-control-lg" 
+                                    id="empresa"
+                                    placeholder="Nombre de la empresa"
+                                    required
+                                >
+                            </div>
+
+                            <!-- Contraseña -->
+                            <div class="mb-3">
+                                <label for="password1" class="form-label fw-semibold">
+                                    <i class="bi bi-shield-lock"></i> Contraseña
+                                </label>
+                                <div class="password-wrapper">
+                                    <input 
+                                        type="password" 
+                                        name="password1"
+                                        class="form-control form-control-lg {% if form.password1.errors %}is-invalid{% endif %}" 
+                                        id="password1"
+                                        placeholder="••••••••"
+                                        required
+                                    >
+                                    <button 
+                                        type="button" 
+                                        class="toggle-password" 
+                                        onclick="togglePassword('password1', 'icon1')"
+                                        aria-label="Mostrar contraseña"
+                                    >
+                                        <span id="icon1">👁️</span>
+                                    </button>
+                                </div>
+                                {% if form.password1.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.password1.errors.0 }}
+                                </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    Mínimo 10 caracteres, con mayúsculas, números y símbolos
+                                </div>
+                            </div>
+
+                            <!-- Confirmar contraseña -->
+                            <div class="mb-4">
+                                <label for="password2" class="form-label fw-semibold">
+                                    <i class="bi bi-shield-lock-fill"></i> Confirmar contraseña
+                                </label>
+                                <div class="password-wrapper">
+                                    <input 
+                                        type="password" 
+                                        name="password2"
+                                        class="form-control form-control-lg {% if form.password2.errors %}is-invalid{% endif %}" 
+                                        id="password2"
+                                        placeholder="••••••••"
+                                        required
+                                    >
+                                    <button 
+                                        type="button" 
+                                        class="toggle-password" 
+                                        onclick="togglePassword('password2', 'icon2')"
+                                        aria-label="Mostrar contraseña"
+                                    >
+                                        <span id="icon2">👁️</span>
+                                    </button>
+                                </div>
+                                {% if form.password2.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.password2.errors.0 }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Campo oculto para identificar tipo -->
+                            <input type="hidden" name="user_type" value="auditor">
+
+                            <!-- Términos y condiciones -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input 
+                                        type="checkbox" 
+                                        class="form-check-input" 
+                                        id="terminos"
+                                        required
+                                    >
+                                    <label class="form-check-label" for="terminos">
+                                        Acepto los <a href="#" class="text-warning">términos y condiciones</a> y el <a href="#" class="text-warning">código de ética</a> profesional
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Botón de registro -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-auditor btn-lg">
+                                    <i class="bi bi-shield-plus"></i> Solicitar cuenta de auditor
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Separador -->
+                        <hr class="my-4">
+
+                        <!-- Links -->
+                        <div class="text-center">
+                            <small class="text-muted">
+                                ¿Ya tienes cuenta de auditor? 
+                                <a href="{% url 'InicioSesionAuditor' %}" class="text-warning fw-semibold text-decoration-none">
+                                    Iniciar sesión
+                                </a>
+                            </small>
+                            <br>
+                            <small class="text-muted mt-2 d-block">
+                                ¿Eres usuario regular? 
+                                <a href="{% url 'RegistroUsuario' %}" class="text-primary fw-semibold text-decoration-none">
+                                    Registro normal
+                                </a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer info con advertencia -->
+                <div class="text-center mt-3">
+                    <div class="alert alert-warning border-0 shadow-sm py-2" role="alert">
+                        <small>
+                            <i class="bi bi-clock-history"></i> 
+                            <strong>Nota:</strong> Tu solicitud será revisada en 24-48 horas.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-3 mt-auto">
+        <div class="container">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        // Función para mostrar/ocultar contraseña
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                icon.textContent = '👁️';
+            }
+        }
+
+        // Validación del formulario
+        document.getElementById('registroAuditorForm').addEventListener('submit', function(e) {
+            const password1 = document.getElementById('password1').value;
+            const password2 = document.getElementById('password2').value;
+            const terminos = document.getElementById('terminos').checked;
+            const email = document.getElementById('email').value;
+            
+            // Validar contraseñas
+            if (password1 !== password2) {
+                e.preventDefault();
+                alert('Las contraseñas no coinciden');
+                return false;
+            }
+            
+            // Validar longitud de contraseña
+            if (password1.length < 10) {
+                e.preventDefault();
+                alert('La contraseña debe tener al menos 10 caracteres');
+                return false;
+            }
+            
+            // Validar términos
+            if (!terminos) {
+                e.preventDefault();
+                alert('Debes aceptar los términos y condiciones');
+                return false;
+            }
+            
+            // Validar email corporativo (opcional)
+            if (!email.includes('@')) {
+                e.preventDefault();
+                alert('Ingresa un correo electrónico válido');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

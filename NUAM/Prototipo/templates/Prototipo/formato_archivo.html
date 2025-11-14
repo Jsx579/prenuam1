@@ -1,0 +1,409 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Formato Archivo de Carga - NUAM</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="d-flex align-items-center ms-auto">
+                    <a href="{% url 'CargaArchivo' %}" class="btn btn-outline-light btn-sm me-2">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </a>
+                    <a href="{% url 'CerrarSesion' %}" class="btn btn-outline-light btn-sm">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="display-6 fw-bold text-primary">
+                    <i class="bi bi-file-earmark-spreadsheet"></i> Formato Archivo de Carga
+                </h1>
+                <p class="text-muted">Especificación de campos para la carga masiva de datos</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4 mb-5">
+        <div class="card shadow-lg border-0 rounded-3">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0 fw-semibold">
+                    <i class="bi bi-table"></i> Estructura del Archivo
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <!-- Controles superiores -->
+                <div class="p-3 bg-light border-bottom">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" id="searchInput" class="form-control" placeholder="Buscar en la tabla...">
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <button class="btn btn-success btn-sm" onclick="exportarExcel()">
+                                <i class="bi bi-file-earmark-excel"></i> Descargar Plantilla Excel
+                            </button>
+                            <button class="btn btn-info btn-sm text-white" onclick="copiarTabla()">
+                                <i class="bi bi-clipboard"></i> Copiar Tabla
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de formato -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle mb-0" id="formatoTabla">
+                        <thead class="table-light sticky-top">
+                            <tr class="text-center">
+                                <th class="fw-semibold">Posición</th>
+                                <th class="fw-semibold">Campo</th>
+                                <th class="fw-semibold">Tipo</th>
+                                <th class="fw-semibold">Largo Campo</th>
+                                <th class="fw-semibold">Decimales</th>
+                                <th class="fw-semibold">Obligatorio</th>
+                                <th class="fw-semibold">Ejemplo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaBody">
+                            <tr>
+                                <td class="text-center">0</td>
+                                <td>EJERCICIO</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">4</td>
+                                <td class="text-center">0</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">2024</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">1</td>
+                                <td>MERCADO</td>
+                                <td class="text-center"><span class="badge bg-warning text-dark">STRING</span></td>
+                                <td class="text-center">2</td>
+                                <td class="text-center">0</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">AC</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">2</td>
+                                <td>NEMO</td>
+                                <td class="text-center"><span class="badge bg-warning text-dark">STRING</span></td>
+                                <td class="text-center">40</td>
+                                <td class="text-center">0</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">COPEC</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">3</td>
+                                <td>FEC_PAGO</td>
+                                <td class="text-center"><span class="badge bg-warning text-dark">STRING</span></td>
+                                <td class="text-center">10</td>
+                                <td class="text-center">0</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">30-12-2025</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">4</td>
+                                <td>SEC_EVE</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">10</td>
+                                <td class="text-center">0</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">0123456789</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">5</td>
+                                <td>DESCRIPCION</td>
+                                <td class="text-center"><span class="badge bg-warning text-dark">STRING</span></td>
+                                <td class="text-center">50</td>
+                                <td class="text-center">0</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">DIVIDENDO...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">8</td>
+                                <td>F8-Monto Impto. GC. y/o Adicional...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">9</td>
+                                <td>F9-Monto Impto. GC. y/o Adicional...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">10</td>
+                                <td>F10-Monto Impto. GC. y/o Adicional...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">11</td>
+                                <td>F11-Monto Impto. GC. y/o Adicional...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">12</td>
+                                <td>F12- REX con Tributacion Cumplida...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">13</td>
+                                <td>F13- REX con Tributacion Cumplida...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">14</td>
+                                <td>F14- REX con Tributacion Cumplida...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">15</td>
+                                <td>F15- REX con Tributacion Cumplida...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">16</td>
+                                <td>F16- REX con Tributacion Cumplida...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">17</td>
+                                <td>F17- REX Exenta -Rentas Exentas Im...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">18</td>
+                                <td>F18- REX Exenta -Rentas Exentas de...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">19</td>
+                                <td>F19- REX No Constitutivos -Ingresos...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">20</td>
+                                <td>F20- Acum desde 01012017 Ren Afe...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">21</td>
+                                <td>F21- Acum desde 01012017 Ren Afe...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">22</td>
+                                <td>F22- Acum desde 01012017 Ren Afe...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">23</td>
+                                <td>F23- Acum desde 01012017 Ren Afe...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">24</td>
+                                <td>F24- Acum desde 01012017 Ren Afe...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">25</td>
+                                <td>F25- Acum desde 01012017 Ren Afe...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">26</td>
+                                <td>F26- Acum desde 01012017 Ren Exe...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">27</td>
+                                <td>F27- Acum desde 01012017 Ren Exe...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">28</td>
+                                <td>F28- Acum desde 01012017 Credito...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">29</td>
+                                <td>F29- Acum hasta 31122016 Ren Afec...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">30</td>
+                                <td>F30- Acum hasta 31122016 Ren Afec...</td>
+                                <td class="text-center"><span class="badge bg-info">NUMBER</span></td>
+                                <td class="text-center">16</td>
+                                <td class="text-center">4</td>
+                                <td class="text-center"><i class="bi bi-check-circle text-success"></i></td>
+                                <td class="text-muted">123456789...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-primary mb-3">
+                            <i class="bi bi-info-circle"></i> Notas Importantes
+                        </h6>
+                        <ul class="small mb-0">
+                            <li>Todos los campos marcados con <i class="bi bi-check-circle text-success"></i> son obligatorios</li>
+                            <li>Los campos tipo NUMBER deben contener solo números</li>
+                            <li>Los campos tipo STRING pueden contener texto alfanumérico</li>
+                            <li>Respetar el largo máximo de cada campo</li>
+                            <li>Los decimales se indican con punto (.) no con coma (,)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-primary mb-3">
+                            <i class="bi bi-file-earmark-excel"></i> Formatos Soportados
+                        </h6>
+                        <ul class="small mb-0">
+                            <li><strong>Excel:</strong> .xlsx, .xls</li>
+                            <li><strong>CSV:</strong> .csv (separado por comas)</li>
+                            <li><strong>Codificación:</strong> UTF-8</li>
+                            <li><strong>Tamaño máximo:</strong> 10 MB</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-4 mt-5">
+        <div class="container">
+            <ul class="nav justify-content-center mb-2">
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Prototipo/js/formato_archivo.js' %}"></script>

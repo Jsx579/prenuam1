@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Panel de Reportes - NUAM</title>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="d-flex align-items-center ms-auto">
+                    <a href="{% url 'CerrarSesion' %}" class="btn btn-outline-light btn-sm">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}
+        <div class="container mt-5 flex-grow-1">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="text-primary fw-bold mb-2">{{ titulo }}</h2>
+                <p class="text-muted mb-0">Seleccione el tipo de reporte que desea generar y descargar.</p>
+            </div>
+            <div>
+                <a href="{% url 'PanelAuditor' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver al Panel
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h5 class="mb-0 fw-semibold">
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Reporte de Calificaciones
+                        </h5>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h5 class="card-title text-primary mb-3">Todas las Calificaciones (CSV)</h5>
+                        <p class="card-text text-muted flex-grow-1">
+                            Genera un archivo CSV con la información completa de todas las calificaciones
+                            registradas, incluyendo el estado de auditoría y el usuario creador.
+                        </p>
+                        <div class="mt-3">
+                            <a href="{% url 'ReporteCalificacionesCSV' %}" class="btn btn-primary btn-lg w-100" download>
+                                <i class="bi bi-download"></i> Descargar CSV
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light text-muted small">
+                        <i class="bi bi-info-circle"></i> Incluye todos los registros del sistema
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-header bg-success text-white py-3">
+                        <h5 class="mb-0 fw-semibold">
+                            <i class="bi bi-clock-history"></i> Reporte de Registros (Logs)
+                        </h5>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h5 class="card-title text-success mb-3">Registro de Actividad del Sistema (CSV)</h5>
+                        <p class="card-text text-muted flex-grow-1">
+                            Genera un archivo CSV con el historial completo de logs, incluyendo la acción, 
+                            el usuario que la realizó y los detalles del cambio.
+                        </p>
+                        <div class="mt-3">
+                            <a href="{% url 'ReporteLogsCSV' %}" class="btn btn-success btn-lg w-100" download>
+                                <i class="bi bi-download"></i> Descargar CSV
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light text-muted small">
+                        <i class="bi bi-info-circle"></i> Historial completo de actividades
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="alert alert-info border-0 shadow-sm">
+                    <h6 class="alert-heading fw-bold">
+                        <i class="bi bi-lightbulb"></i> Información sobre los reportes
+                    </h6>
+                    <p class="mb-0 small">
+                        Los archivos CSV generados pueden ser abiertos con Excel, Google Sheets o cualquier 
+                        editor de hojas de cálculo. Los datos se actualizan en tiempo real al momento de la descarga.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-4 mt-5">
+        <div class="container">
+            <ul class="nav justify-content-center mb-2">
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    {% endblock %}
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

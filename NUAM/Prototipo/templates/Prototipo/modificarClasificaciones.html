@@ -1,0 +1,327 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Modificar Calificación Tributaria - NUAM</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex ms-auto" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
+                    <button class="btn btn-light" type="submit">Buscar</button>
+                </form>
+                <div class="d-flex align-items-center ms-lg-3">
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text me-3 text-white">
+                            <strong>{{ user.username }}</strong>
+                        </span>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="form-section">
+            <div class="form-header">
+                <h4 class="mb-0">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Modificar Calificación Tributaria
+                </h4>
+            </div>
+        </div>
+
+        <form id="formModificar" method="post">
+            {% csrf_token %}
+            
+            <!-- Sección: Información General -->
+            <div class="form-section">
+                <div class="form-section-header">
+                    <i class="bi bi-info-circle me-2"></i>Información General
+                </div>
+                <div class="form-section-body">
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="mercado" class="form-label">Mercado</label>
+                            <select class="form-select" id="mercado" name="mercado">
+                                <option value="AC" selected>AC - Mercado de Acciones</option>
+                                <option value="RF">RF - Renta Fija</option>
+                                <option value="DV">DV - Derivados</option>
+                                <option value="FI">FI - Fondos de Inversión</option>
+                                <option value="MM">MM - Mercado de Monedas</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="instrumento" class="form-label">Instrumento</label>
+                            <input type="text" class="form-control" id="instrumento" name="instrumento" value="FROWARD">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="valorHistorico" class="form-label">Valor Histórico</label>
+                            <input type="text" class="form-control" id="valorHistorico" name="valorHistorico" value="0.00000000">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="fechaPago" class="form-label">Fecha Pago</label>
+                            <input type="date" class="form-control" id="fechaPago" name="fechaPago" value="2023-05-23">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="eventoCapital" class="form-label">Evento Capital</label>
+                            <input type="text" class="form-control" id="eventoCapital" name="eventoCapital" value="0">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" value="DIVIDENDO DE PRUEBA">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="secuenciaEvento" class="form-label">Secuencia Evento</label>
+                            <input type="text" class="form-control" id="secuenciaEvento" name="secuenciaEvento" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="ano" class="form-label">Año</label>
+                            <input type="text" class="form-control" id="ano" name="ano" value="2023">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección: Factores 08-19 -->
+            <div class="form-section">
+                <div class="form-section-header">
+                    <i class="bi bi-calculator me-2"></i>Factores Tributarios (08-19)
+                </div>
+                <div class="form-section-body">
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor08" class="form-label">Factor-08: Con crédito por IDPC generados a contar del 01.01.2017</label>
+                            <input type="text" class="form-control" id="factor08" name="factor08" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor09" class="form-label">Factor-09: Con crédito por IDPC acumulados hasta el 31.12.2016</label>
+                            <input type="text" class="form-control" id="factor09" name="factor09" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor10" class="form-label">Factor-10: Con derecho a crédito por pago IDPC Valuación</label>
+                            <input type="text" class="form-control" id="factor10" name="factor10" value="0.00000000">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor11" class="form-label">Factor-11: Sin derecho a crédito</label>
+                            <input type="text" class="form-control" id="factor11" name="factor11" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor12" class="form-label">Factor-12 Impto. 1ra Categ. Evento SI Comp. Con Devolución</label>
+                            <input type="text" class="form-control" id="factor12" name="factor12" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor13" class="form-label">Factor-13 Impto. 1ra Categ. Afecta GI Comp. Sin Devolución</label>
+                            <input type="text" class="form-control" id="factor13" name="factor13" value="0.00000000">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor14" class="form-label">Factor-14 Impto. 1ra Categ. Evento GI Comp. Sin Devolución</label>
+                            <input type="text" class="form-control" id="factor14" name="factor14" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor15" class="form-label">Factor-15 Impto. Créditos pro Impuestos Externos</label>
+                            <input type="text" class="form-control" id="factor15" name="factor15" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor16" class="form-label">Factor-16: No Constitutiva de Renta Acogido a Impto.</label>
+                            <input type="text" class="form-control" id="factor16" name="factor16" value="1.00000000">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor17" class="form-label">Factor-17 No Constitutiva de Renta Devolución de Capital Art.17</label>
+                            <input type="text" class="form-control" id="factor17" name="factor17" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor18" class="form-label">Factor-18: Rentas Exentas Rebajar GC Y/O Impto Adicional</label>
+                            <input type="text" class="form-control" id="factor18" name="factor18" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor19" class="form-label">Factor-19: Ingreso no Constitutiva de Renta</label>
+                            <input type="text" class="form-control" id="factor19" name="factor19" value="0.00000000">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección: Factores 20-28 -->
+            <div class="form-section">
+                <div class="form-section-header">
+                    <i class="bi bi-calculator me-2"></i>Factores Tributarios (20-28)
+                </div>
+                <div class="form-section-body">
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor20" class="form-label">Factor-20: Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor20" name="factor20" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor21" class="form-label">Factor-21: Con Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor21" name="factor21" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor22" class="form-label">Factor-22: Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor22" name="factor22" value="0.00000000">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor23" class="form-label">Factor-23: Con Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor23" name="factor23" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor24" class="form-label">Factor-24: Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor24" name="factor24" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor25" class="form-label">Factor-25: Con Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor25" name="factor25" value="0.00000000">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor26" class="form-label">Factor-26: Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor26" name="factor26" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor27" class="form-label">Factor-27: Con Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor27" name="factor27" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor28" class="form-label">Factor-28: Crédito por IPE</label>
+                            <input type="text" class="form-control" id="factor28" name="factor28" value="0.00000000">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección: Factores 29-37 -->
+            <div class="form-section">
+                <div class="form-section-header">
+                    <i class="bi bi-calculator me-2"></i>Factores Tributarios (29-37)
+                </div>
+                <div class="form-section-body">
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor29" class="form-label">Factor-29: Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor29" name="factor29" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor30" class="form-label">Factor-30: Con Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor30" name="factor30" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor31" class="form-label">Factor-31: Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor31" name="factor31" value="0.00000000">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor32" class="form-label">Factor-32: Con Derecho a Devolución</label>
+                            <input type="text" class="form-control" id="factor32" name="factor32" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor33" class="form-label">Factor-33: Crédito por IPE</label>
+                            <input type="text" class="form-control" id="factor33" name="factor33" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor34" class="form-label">Factor-34: Créd. Por Impto. Tasa Adicional. Ex Art. 21 LIR</label>
+                            <input type="text" class="form-control" id="factor34" name="factor34" value="0.00000000">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor35" class="form-label">Factor-35: TASA EFECTIVA DEL CRED. DEL FUT (TEF)</label>
+                            <input type="text" class="form-control" id="factor35" name="factor35" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor36" class="form-label">Factor-36: TASA EFECTIVA DEL CRED. DEL FUNT (TEX)</label>
+                            <input type="text" class="form-control" id="factor36" name="factor36" value="0.00000000">
+                        </div>
+                        <div class="col-md-4 col-form-group">
+                            <label for="factor37" class="form-label">Factor-37: NUM DEVOLUCION DE CAPITAL ART. 17 NUM 7 LIR</label>
+                            <input type="text" class="form-control" id="factor37" name="factor37" value="0.00000000">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección: Factor 19B -->
+            <div class="form-section">
+                <div class="form-section-header">
+                    <i class="bi bi-calculator me-2"></i>Factor Adicional
+                </div>
+                <div class="form-section-body">
+                    <div class="row">
+                        <div class="col-md-12 col-form-group">
+                            <label for="factor19b" class="form-label">Factor-19B: Ingreso no Constitutivos de Renta</label>
+                            <input type="text" class="form-control" id="factor19b" name="factor19b" value="0.00000000">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="footer-actions">
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-secondary btn-action" onclick="window.history.back()">
+                        <i class="bi bi-x-circle me-2"></i>CANCELAR
+                    </button>
+                    <button type="submit" class="btn btn-success btn-action">
+                        <i class="bi bi-check-circle me-2"></i>GUARDAR
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-4 mt-5">
+        <div class="container">
+            <ul class="nav justify-content-center mb-2">
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Prototipo/js/modificarClasificaciones.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Ingreso Calificaciones Tributarias - NUAM</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex ms-auto" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
+                    <button class="btn btn-light" type="submit">Buscar</button>
+                </form>
+                <div class="d-flex align-items-center ms-lg-3">
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text me-3 text-white">
+                            <strong>{{ user.username }}</strong>
+                        </span>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="display-6 fw-bold text-primary">Ingreso de Calificaciones Tributarias</h1>
+                <p class="text-muted">Complete los datos para ingresar una nueva calificación</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario Principal -->
+    <div class="container mt-4 mb-5">
+        <div class="card shadow-lg border-0 rounded-3">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0 fw-semibold">
+                    <i class="bi bi-plus-circle"></i> ULINGRESO_CALIFICACIONES_TRIBUTARIAS
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <form id="formIngreso" method="post">
+                    {% csrf_token %}
+
+                    <!-- Fila 1: Mercado, Instrumento, Valor Histórico -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label for="mercado" class="form-label fw-semibold">Mercado</label>
+                            <select class="form-select" id="mercado" name="mercado" required>
+                                <option value="">Seleccione...</option>
+                                <option value="AC">AC</option>
+                                <option value="RF">RF</option>
+                                <option value="DER">DER</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="instrumento" class="form-label fw-semibold">Instrumento</label>
+                            <input type="text" class="form-control" id="instrumento" name="instrumento" placeholder="JEEP" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="valorHistorico" class="form-label fw-semibold">Valor Histórico</label>
+                            <input type="text" class="form-control" id="valorHistorico" name="valorHistorico">
+                        </div>
+                    </div>
+
+                    <!-- Fila 2: Fecha Pago, Evento Capital, Descripción -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label for="fechaPago" class="form-label fw-semibold">Fecha Pago</label>
+                            <input type="date" class="form-control" id="fechaPago" name="fechaPago" value="2025-01-01">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="eventoCapital" class="form-label fw-semibold">Evento Capital</label>
+                            <select class="form-select" id="eventoCapital" name="eventoCapital">
+                                <option value="">Seleccione...</option>
+                                <option value="DIV">Dividendo</option>
+                                <option value="INT">Interés</option>
+                                <option value="AMOR">Amortización</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="descripcion" class="form-label fw-semibold">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="JEEP ACC TXT">
+                        </div>
+                    </div>
+
+                    <!-- Fila 3: Secuencia Evento, Año -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="secuenciaEvento" class="form-label fw-semibold">Secuencia Evento</label>
+                            <input type="text" class="form-control" id="secuenciaEvento" name="secuenciaEvento" value="100000809">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ano" class="form-label fw-semibold">Año</label>
+                            <input type="number" class="form-control" id="ano" name="ano" value="2025" min="2000" max="2100">
+                        </div>
+                    </div>
+
+                    <!-- Checkbox: Ingresos por Montos -->
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ingresosPorMontos" name="ingresosPorMontos">
+                                <label class="form-check-label fw-semibold" for="ingresosPorMontos">
+                                    Ingresos por Montos
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Separador -->
+                    <hr class="my-4">
+
+                    <!-- SECCIÓN DE FACTORES -->
+                    <h5 class="text-primary fw-bold mb-4">
+                        <i class="bi bi-list-ol"></i> Factores y Detalles
+                    </h5>
+
+                    <!-- Factores Column 1 -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-08 No Constitutiva de Renta Acogida a Imptos.</label>
+                            <input type="text" class="form-control form-control-sm" name="factor08" placeholder="Factor-09 Impsto. Tsa Camip. Afecto GC. Comp. Con">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-10 Impuesto Tasa Adicional Evento Art. 21 LIR</label>
+                            <input type="text" class="form-control form-control-sm" name="factor10">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-11 Honorarios Impuesto Tsa Camip</label>
+                            <input type="text" class="form-control form-control-sm" name="factor11" placeholder="Factor-12 Impsto. Tsa Camip. Afecto GC. Impsto. Único">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-13 Impsto. Tsa Camip. Afecto GC. Impsto. Exención</label>
+                            <input type="text" class="form-control form-control-sm" name="factor13">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-14 Impsto. Tsa Camip. Evento GC. Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor14" placeholder="Factor-15 Impsto. Créditos pra Impuestos Finales">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-16 No Constitutiva de Renta Acogida a Imptos. Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor16">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-17 No Constitutiva de Renta Acogida de Capital Art.17</label>
+                            <input type="text" class="form-control form-control-sm" name="factor17" placeholder="Rentas Exentas de Impsto. GC Y-O Impsto Adicional">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-19A Ingreso no Constitutiva de Renta</label>
+                            <input type="text" class="form-control form-control-sm" name="factor19a">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-20 Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor20" placeholder="Factor-21 Con Derecho a Devolución">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-22 Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor22">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-23 Con Derecho a Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor23" placeholder="Factor-24 Sin Derecho a Devolución">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-25 Con Derecho a Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor25">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-26 Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor26" placeholder="Factor-27 Con Derecho a Devolución">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-28 Crédito por IPE</label>
+                            <input type="text" class="form-control form-control-sm" name="factor28">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-29 Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor29" placeholder="Factor-30 Con Derecho a Devolución">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-31 Sin Derecho a Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor31">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-32 Con Derecho a Devolución</label>
+                            <input type="text" class="form-control form-control-sm" name="factor32" placeholder="Factor-33 Crédito por IPE">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-34 Créd. Por Impsto. Tasa Adicional Ev. Art. 21 LIR</label>
+                            <input type="text" class="form-control form-control-sm" name="factor34">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-35 Tasa Efectiva Del Créd. Del FUNT (TEF)</label>
+                            <input type="text" class="form-control form-control-sm" name="factor35" placeholder="Factor-36 Tasa Efectiva Del Créd. Del FUNT (TEX)">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Factor-37 Créd. Por Impsto. Tasa Adicional Ev. Art. 21 LIR Capital Art. 17 num 7 LIR</label>
+                            <input type="text" class="form-control form-control-sm" name="factor37" placeholder="LIK, FACTOR_38_DESCRIPCIÓN">
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                        <button type="submit" class="btn btn-success btn-lg px-5">
+                            <i class="bi bi-save"></i> GRABAR
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-lg px-5" onclick="window.history.back()">
+                            <i class="bi bi-x-circle"></i> CANCELAR
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-4 mt-auto">
+        <div class="container">
+            <ul class="nav justify-content-center mb-2">
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Prototipo/js/ingresoTributario.js' %}"></script>
+</body>
+</html>

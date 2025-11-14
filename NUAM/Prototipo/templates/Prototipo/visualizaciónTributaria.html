@@ -1,0 +1,355 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Calificaciones Tributarias - NUAM</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex ms-auto" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
+                    <button class="btn btn-light" type="submit">Buscar</button>
+                </form>
+                <div class="d-flex align-items-center ms-lg-3">
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text me-3 text-white">
+                            <strong>{{ user.username }}</strong>
+                        </span>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="display-6 fw-bold text-primary">Calificaciones Tributarias</h1>
+                <p class="text-muted">Gestión completa de calificaciones tributarias del mercado de acciones</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros Principales -->
+    <div class="container-fluid mt-4">
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body p-4">
+                <form id="filtrosForm" class="row g-3">
+                    <!-- Mercado -->
+                    <div class="col-md-2">
+                        <label for="mercado" class="form-label fw-semibold">Mercado</label>
+                        <select class="form-select" id="mercado" name="mercado">
+                            <option value="ACCIONES" selected>ACCIONES</option>
+                            <option value="RENTA_FIJA">RENTA FIJA</option>
+                            <option value="DERIVADOS">DERIVADOS</option>
+                        </select>
+                    </div>
+
+                    <!-- Origen -->
+                    <div class="col-md-2">
+                        <label for="origen" class="form-label fw-semibold">Origen</label>
+                        <select class="form-select" id="origen" name="origen">
+                            <option value="">Todos</option>
+                            <option value="CORREDOR" selected>CORREDOR</option>
+                            <option value="NACIONAL">NACIONAL</option>
+                            <option value="INTERNACIONAL">INTERNACIONAL</option>
+                        </select>
+                    </div>
+
+                    <!-- Periodo Comercial -->
+                    <div class="col-md-2">
+                        <label for="periodo" class="form-label fw-semibold">Periodo Comercial</label>
+                        <select class="form-select" id="periodo" name="periodo">
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023" selected>2023</option>
+                        </select>
+                    </div>
+
+                    <!-- Checkbox Calificación Pendiente -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold d-block">&nbsp;</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="calificacionPendiente" name="calificacionPendiente">
+                            <label class="form-check-label" for="calificacionPendiente">
+                                Calificación Pendiente
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="col-md-3 text-end">
+                        <label class="form-label d-block">&nbsp;</label>
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="bi bi-search"></i> BUSCAR
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="limpiarFiltros()">
+                            <i class="bi bi-x-circle"></i> LIMPIAR
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Resultados -->
+    <div class="container-fluid">
+        <div class="card shadow-lg border-0 rounded-3">
+            <div class="card-header bg-secondary text-white py-3">
+                <h5 class="mb-0 fw-semibold">
+                    <i class="bi bi-table"></i> Registros de Calificaciones
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                
+                <!-- Tabla responsive con scroll horizontal -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle mb-0" id="tablaCalificaciones">
+                        <thead class="table-light sticky-top">
+                            <tr class="text-center">
+                                <th class="fw-semibold small">ID</th>
+                                <th class="fw-semibold small">Factor-29</th>
+                                <th class="fw-semibold small">Factor-30</th>
+                                <th class="fw-semibold small">Factor-31</th>
+                                <th class="fw-semibold small">Factor-32</th>
+                                <th class="fw-semibold small">Factor-33</th>
+                                <th class="fw-semibold small">Factor-34</th>
+                                <th class="fw-semibold small">Factor-35</th>
+                                <th class="fw-semibold small">Factor-36</th>
+                                <th class="fw-semibold small">Factor-37</th>
+                                <th class="fw-semibold small">Acogido ISFUT</th>
+                                <th class="fw-semibold small">Origen</th>
+                                <th class="fw-semibold small">Corredor</th>
+                                <th class="fw-semibold small">
+                                    <input type="checkbox" class="form-check-input" id="selectAll" title="Seleccionar todo">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultadosTabla">
+                            <!-- Fila de ejemplo 1 -->
+                            <tr>
+                                <td class="text-center">0000</td>
+                                <td class="text-end">0,00000000</td>
+                                <td class="text-end">0,00000000</td>
+                                <td class="text-end">0,00000000</td>
+                                <td class="text-end">0,00000000</td>
+                                <td class="text-end">0,00000000</td>
+                                <td class="text-end">0,00000000</td>
+                                <td class="text-end">0,00000000</td>
+                                <td class="text-end">0,00000000</td>
+                                <td class="text-end">0,00000000</td>
+                                <td class="text-center">N</td>
+                                <td class="text-center">-</td>
+                                <td class="text-center">CORREDOR</td>
+                                <td class="text-center">
+                                    <input type="checkbox" class="form-check-input row-select">
+                                </td>
+                            </tr>
+                            <!-- Más filas se agregarían dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginación -->
+                <div class="p-3 border-top bg-light">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <small class="text-muted">
+                                Elementos mostrados: <strong>1</strong> de <strong>1</strong>
+                            </small>
+                        </div>
+                        <div class="col-md-6">
+                            <nav aria-label="Navegación de páginas">
+                                <ul class="pagination justify-content-end mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">«</a>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">‹</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">›</a>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">»</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="p-4 border-top">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-primary btn-action" onclick="ingresar()">
+                                    <i class="bi bi-plus-circle"></i> INGRESAR
+                                </button>
+                                <button type="button" class="btn btn-warning btn-action" onclick="modificar()">
+                                    <i class="bi bi-pencil"></i> MODIFICAR
+                                </button>
+                                <button type="button" class="btn btn-danger btn-action" onclick="eliminar()">
+                                    <i class="bi bi-trash"></i> ELIMINAR
+                                </button>
+                                <button type="button" class="btn btn-info btn-action text-white" onclick="copiar()">
+                                    <i class="bi bi-files"></i> COPIAR
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-success btn-action" onclick="cargaXFactor()">
+                                    <i class="bi bi-file-earmark-arrow-up"></i> CARGA X FACTOR
+                                </button>
+                                <button type="button" class="btn btn-success btn-action" onclick="cargaXMonto()">
+                                    <i class="bi bi-cash-stack"></i> CARGA X MONTO
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-action" onclick="opciones()">
+                                    <i class="bi bi-gear"></i> OPCIONES
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-4 mt-5">
+        <div class="container">
+            <ul class="nav justify-content-center mb-2">
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        // Limpiar filtros
+        function limpiarFiltros() {
+            document.getElementById('filtrosForm').reset();
+            document.getElementById('mercado').value = 'ACCIONES';
+            buscarCalificaciones();
+        }
+
+        // Buscar calificaciones
+        document.getElementById('filtrosForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            buscarCalificaciones();
+        });
+
+        function buscarCalificaciones() {
+            const mercado = document.getElementById('mercado').value;
+            const origen = document.getElementById('origen').value;
+            const periodo = document.getElementById('periodo').value;
+            const pendiente = document.getElementById('calificacionPendiente').checked;
+
+            console.log('Buscando:', { mercado, origen, periodo, pendiente });
+            
+            // Aquí iría la llamada AJAX al backend
+            // fetch('/api/calificaciones/', { ... })
+            
+            alert(`Buscando calificaciones:\nMercado: ${mercado}\nOrigen: ${origen}\nPeriodo: ${periodo}`);
+        }
+
+        // Seleccionar todos los checkboxes
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.row-select');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        // Funciones de botones
+        function ingresar() {
+            window.location.href = "{% url 'IngresoTributaria' %}";
+        }
+
+        function modificar() {
+            const selected = document.querySelectorAll('.row-select:checked');
+            if (selected.length === 0) {
+                alert('Por favor seleccione al menos un registro para modificar');
+                return;
+            }
+            if (selected.length > 1) {
+                alert('Por favor seleccione solo un registro para modificar');
+                return;
+            }
+            console.log('Modificando registro...');
+            // Redirigir a página de modificación
+        }
+
+        function eliminar() {
+            const selected = document.querySelectorAll('.row-select:checked');
+            if (selected.length === 0) {
+                alert('Por favor seleccione al menos un registro para eliminar');
+                return;
+            }
+            if (confirm(`¿Está seguro de eliminar ${selected.length} registro(s)?`)) {
+                console.log('Eliminando registros...');
+                // Llamar al backend para eliminar
+            }
+        }
+
+        function copiar() {
+            const selected = document.querySelectorAll('.row-select:checked');
+            if (selected.length === 0) {
+                alert('Por favor seleccione al menos un registro para copiar');
+                return;
+            }
+            console.log('Copiando registros...');
+            // Lógica de copiar
+        }
+
+        function cargaXFactor() {
+            window.location.href = "{% url 'CargaArchivo' %}";
+        }
+
+        function cargaXMonto() {
+            alert('Función de Carga X Monto - En desarrollo');
+            // Redirigir a página de carga por monto
+        }
+
+        function opciones() {
+            alert('Opciones adicionales - En desarrollo');
+            // Abrir modal de opciones
+        }
+
+        // Cargar datos iniciales
+        window.addEventListener('load', function() {
+            buscarCalificaciones();
+        });
+    </script>
+</body>
+</html>

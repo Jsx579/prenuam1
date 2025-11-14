@@ -1,0 +1,1757 @@
+/* ========================================
+   ESTILOS GENERALES
+   ======================================== */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contenedor principal centrado */
+.min-vh-100 {
+    min-height: calc(100vh - 200px);
+}
+
+/* ========================================
+   CARDS
+   ======================================== */
+/* Card mejorado con animación */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+}
+
+/* Bordes redondeados del card */
+.rounded-4 {
+    border-radius: 1rem !important;
+}
+
+.rounded-3 {
+    border-radius: 0.75rem !important;
+}
+
+/* ========================================
+   FORMULARIOS E INPUTS
+   ======================================== */
+/* Inputs más bonitos */
+.form-control {
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+/* Mejoras para inputs grandes */
+.form-control-lg {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+/* Inputs pequeños para filtros de tabla */
+.form-control-sm {
+    border: 1px solid #dee2e6;
+    font-size: 0.875rem;
+}
+
+.form-control-sm:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+}
+
+/* ========================================
+   MENSAJES Y ALERTAS
+   ======================================== */
+/* Contenedor de mensajes de error/éxito */
+#messageContainer {
+    margin-bottom: 20px;
+}
+
+#messageContainer .alert {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+/* Animación para los campos con error */
+.is-invalid {
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* ========================================
+   PASSWORD FIELD
+   ======================================== */
+/* Wrapper para el campo de contraseña con botón */
+.password-wrapper {
+    position: relative;
+}
+
+/* Botón para mostrar/ocultar contraseña */
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1.3rem;
+    padding: 5px;
+    z-index: 10;
+    line-height: 1;
+    transition: opacity 0.2s ease;
+}
+
+.toggle-password:hover {
+    opacity: 0.6;
+}
+
+.toggle-password:focus {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+    border-radius: 5px;
+}
+
+/* Ajuste para que el texto no se sobreponga al botón */
+.password-wrapper .form-control {
+    padding-right: 50px;
+}
+
+/* ========================================
+   BOTONES
+   ======================================== */
+/* Botón principal (primary) */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Botones de acción con ancho mínimo */
+.btn-action {
+    min-width: 140px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-action:active {
+    transform: translateY(0);
+}
+
+/* ========================================
+   SPINNER Y LOADING
+   ======================================== */
+/* Spinner de carga */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.2em;
+}
+
+/* ========================================
+   CHECKBOX Y RADIO
+   ======================================== */
+/* Checkbox mejorado */
+.form-check-input:checked {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+.form-check-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+}
+
+/* ========================================
+   ENLACES
+   ======================================== */
+/* Links */
+a {
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #764ba2 !important;
+}
+
+/* ========================================
+   NAVBAR
+   ======================================== */
+/* Navbar con gradiente */
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* ========================================
+   TABLAS
+   ======================================== */
+/* Tabla con hover mejorado */
+.table-hover tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.08);
+    transition: background-color 0.2s ease;
+}
+
+/* Headers de tabla */
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+/* Tabla responsive mejor scroll */
+.table-responsive {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* ========================================
+   SECCIÓN DE FILTROS
+   ======================================== */
+/* Sección de filtros con gradiente */
+.filter-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Labels de filtros */
+.filter-section .form-label {
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+/* ========================================
+   PAGINACIÓN
+   ======================================== */
+/* Paginación mejorada */
+.pagination .page-link {
+    border-radius: 0.375rem;
+    margin: 0 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: #667eea;
+    border-color: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+footer .nav-link {
+    color: #6c757d;
+    transition: color 0.2s ease;
+}
+
+footer .nav-link:hover {
+    color: #667eea !important;
+}
+
+/* ========================================
+   UTILIDADES Y HELPERS
+   ======================================== */
+/* Sombras personalizadas */
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.15) !important;
+}
+
+/* Gap personalizado */
+.gap-2 {
+    gap: 0.5rem !important;
+}
+
+.gap-3 {
+    gap: 1rem !important;
+}
+
+/* ========================================
+   PÁGINA DE INICIO - CARDS HOVER
+   ======================================== */
+/* Cards con hover mejorado para menú de navegación */
+.hover-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.hover-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 1rem 3rem rgba(102, 126, 234, 0.2) !important;
+}
+
+/* Círculos de iconos */
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.hover-card:hover .icon-circle {
+    transform: scale(1.1);
+}
+
+/* Enlaces sin subrayado para cards */
+a.text-decoration-none:hover .card-title {
+    color: #667eea !important;
+}
+
+/* Hero Section */
+.lead {
+    font-size: 1.15rem;
+    line-height: 1.7;
+}
+
+/* ========================================
+   FORMULARIO DE CALIFICACIÓN TRIBUTARIA
+   ======================================== */
+/* Header del formulario con gradiente */
+.form-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Secciones del formulario */
+.form-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.form-section-header {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-section-body {
+    padding: 1.5rem;
+}
+
+/* Labels específicos del formulario tributario */
+.form-section .form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Inputs del formulario */
+.form-section .form-control, 
+.form-section .form-select {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.form-section .form-control:focus, 
+.form-section .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+}
+
+.form-section .form-control:disabled {
+    background-color: #f8f9fa;
+}
+
+/* Footer con botones del formulario */
+.footer-actions {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: sticky;
+    bottom: 20px;
+    z-index: 100;
+}
+
+/* Grupos de campos */
+.col-form-group {
+    margin-bottom: 1rem;
+}
+
+/* Campo de solo lectura */
+.readonly-field {
+    background-color: #f8f9fa !important;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+/* Tablet y móviles */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 2rem !important;
+    }
+    
+    .display-4 {
+        font-size: 2.5rem;
+    }
+
+    .display-5 {
+        font-size: 2rem;
+    }
+
+    .display-6 {
+        font-size: 1.75rem;
+    }
+
+    /* Botones de acción en móvil */
+    .btn-action {
+        min-width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Filtros apilados en móvil */
+    .filter-section {
+        padding: 1rem;
+    }
+
+    /* Tabla responsive en móvil */
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+
+    .table thead th {
+        font-size: 0.75rem;
+    }
+
+    /* Hero section en móvil */
+    .lead {
+        font-size: 1rem;
+    }
+
+    /* Cards de navegación en móvil */
+    .hover-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+    }
+
+    /* Formulario tributario en móvil */
+    .form-section-body {
+        padding: 1rem;
+    }
+
+    .form-header {
+        padding: 1rem;
+    }
+
+    .footer-actions {
+        position: relative;
+        bottom: 0;
+    }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+
+    .card-header h5 {
+        font-size: 1rem;
+    }
+
+    .btn-lg {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+
+    .form-section-header {
+        font-size: 0.9rem;
+    }
+
+    .form-label {
+        font-size: 0.85rem;
+    }
+}
+
+/* ========================================
+   ANIMACIONES ADICIONALES
+   ======================================== */
+/* Fade in suave para cards */
+.card {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animación para botones al hacer click */
+.btn:active {
+    transform: scale(0.95);
+}
+
+/* Animación para secciones del formulario */
+.form-section {
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}/* Est
+ilos para Ingreso Tributario */
+.suggestions-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    border-radius: 0 0 0.375rem 0.375rem;
+}
+
+.suggestion-item {
+    cursor: pointer;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.suggestion-item:hover {
+    background-color: #f8f9fa;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+/* Animaciones para mensajes */
+.alert-message {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos para campos deshabilitados */
+input:disabled {
+    background-color: #f8f9fa;
+    opacity: 0.6;
+}
+
+/* Spinner personalizado */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Mejoras visuales para factores */
+.form-control-sm {
+    font-size: 0.875rem;
+}
+
+.form-label.small {
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+/* Responsive para campos de factores */
+@media (max-width: 768px) {
+    .row.g-3 .col-md-6 {
+        margin-bottom: 1rem;
+    }
+    
+    .form-label.small {
+        font-size: 0.75rem;
+    }
+}/* Es
+tilos para Modificar Clasificaciones */
+
+/* Campos modificados */
+.field-modified {
+    border-left: 3px solid #ffc107 !important;
+    background-color: #fff3cd !important;
+    transition: all 0.3s ease;
+}
+
+/* Factores sugeridos */
+.factor-suggested {
+    border-left: 3px solid #0d6efd !important;
+    background-color: #cff4fc !important;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { background-color: #cff4fc; }
+    50% { background-color: #b6effb; }
+    100% { background-color: #cff4fc; }
+}
+
+/* Indicador de modificación */
+.modified-indicator {
+    font-size: 0.8rem;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Campos con advertencia */
+.is-warning {
+    border-color: #ffc107;
+    background-color: #fff3cd;
+}
+
+.warning-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #664d03;
+}
+
+/* Tooltip personalizado */
+.custom-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 1000;
+    max-width: 250px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: tooltipFadeIn 0.2s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mensajes flotantes */
+.alert-message {
+    animation: slideInRight 0.3s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Botón guardar deshabilitado */
+button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Secciones de formulario mejoradas */
+.form-section {
+    margin-bottom: 2rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-section-header {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.form-section-body {
+    padding: 1.5rem;
+    background: #fff;
+}
+
+/* Campos readonly mejorados */
+.readonly-field {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Grupos de formulario */
+.col-form-group {
+    margin-bottom: 1rem;
+}
+
+.col-form-group .form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Factores con valores no cero */
+input[id^="factor"]:not([value="0.00000000"]):not([value=""]) {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* Hover effects para campos editables */
+input:not(.readonly-field):hover {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+}
+
+/* Focus mejorado */
+input:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Botones de acción mejorados */
+.footer-actions {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-top: 1px solid #dee2e6;
+    margin-top: 2rem;
+}
+
+.btn-action {
+    min-width: 120px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive mejoras */
+@media (max-width: 768px) {
+    .form-section-body {
+        padding: 1rem;
+    }
+    
+    .col-form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .footer-actions {
+        padding: 1rem;
+    }
+    
+    .btn-action {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .alert-message {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        margin: 1rem;
+        max-width: none !important;
+    }
+}
+
+/* Estados de validación mejorados */
+.is-valid {
+    border-color: #198754;
+    background-color: #d1e7dd;
+}
+
+.is-invalid {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+/* Indicadores de estado */
+.status-indicator {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+}
+
+/* Animación para cambios guardados */
+.saved-animation {
+    animation: savedPulse 1s ease-out;
+}
+
+@keyframes savedPulse {
+    0% { background-color: #d1e7dd; }
+    50% { background-color: #a3d9a4; }
+    100% { background-color: #d1e7dd; }
+}
+
+/* Loading spinner personalizado */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.1em;
+}
+
+/* Mejoras de accesibilidad */
+.form-label:after {
+    content: "";
+}
+
+.form-control:focus {
+    outline: none;
+}
+
+/* Estilos para campos requeridos */
+.required-field::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Grupos de factores */
+.factor-group {
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #fafafa;
+}
+
+.factor-group-title {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}/* Estilos 
+para Carga de Archivos */
+
+/* Zona de drag and drop */
+.drag-highlight {
+    background-color: #e3f2fd !important;
+    border: 2px dashed #2196f3 !important;
+    border-radius: 8px;
+    position: relative;
+}
+
+.drag-highlight::before {
+    content: "Suelte el archivo aquí";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(33, 150, 243, 0.9);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+/* Información del archivo */
+.archivo-info {
+    border-left: 4px solid #28a745;
+    animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Estadísticas del archivo */
+.estadisticas-archivo {
+    border-left: 4px solid #17a2b8;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tabla de datos mejorada */
+.table-responsive {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.table th:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.001);
+    transition: all 0.2s ease;
+}
+
+.table-row-even {
+    background-color: #fafafa;
+}
+
+/* Estados de carga */
+#estadoCarga {
+    border-left: 4px solid #17a2b8;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* Input de archivo mejorado */
+#archivoInput {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fafafa;
+    transition: all 0.3s ease;
+}
+
+#archivoInput:hover {
+    border-color: #007bff;
+    background: #f0f8ff;
+}
+
+#archivoInput:focus {
+    border-color: #007bff;
+    background: #fff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Botones de acción mejorados */
+.btn-lg {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+}
+
+/* Indicadores de progreso */
+.progress-container {
+    position: relative;
+    margin: 1rem 0;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    transition: width 0.3s ease;
+}
+
+/* Modal de formato mejorado */
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-footer {
+    border-top: 1px solid #e9ecef;
+    padding: 1rem 2rem;
+}
+
+/* Tabla en modal */
+.modal .table {
+    font-size: 0.9rem;
+}
+
+.modal .table th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+/* Alertas personalizadas */
+.alert {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    color: #0c5460;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d1e7dd 0%, #badbcc 100%);
+    color: #0f5132;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    color: #664d03;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f1aeb5 100%);
+    color: #721c24;
+}
+
+/* Iconos en alertas */
+.alert i {
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* Animaciones para mensajes */
+.alert {
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Estados de validación para archivos */
+.file-valid {
+    border-color: #28a745 !important;
+    background-color: #d4edda !important;
+}
+
+.file-invalid {
+    border-color: #dc3545 !important;
+    background-color: #f8d7da !important;
+}
+
+/* Spinner de carga personalizado */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Tooltips personalizados */
+.custom-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 1000;
+    max-width: 250px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: tooltipFadeIn 0.2s ease-out;
+}
+
+/* Responsive para carga de archivos */
+@media (max-width: 768px) {
+    .archivo-info,
+    .estadisticas-archivo {
+        margin: 1rem 0;
+    }
+    
+    .estadisticas-archivo .row > div {
+        margin-bottom: 1rem;
+    }
+    
+    .btn-lg {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.8rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .alert {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        margin: 1rem;
+        max-width: none !important;
+    }
+}
+
+/* Mejoras de accesibilidad */
+.btn:focus,
+input:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Estados deshabilitados */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Indicadores de estado de archivo */
+.file-status {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+}
+
+.file-status.success {
+    color: #28a745;
+}
+
+.file-status.error {
+    color: #dc3545;
+}
+
+.file-status.processing {
+    color: #007bff;
+    animation: spin 1s linear infinite;
+}
+
+/* Mejoras visuales para tabs */
+.nav-tabs .nav-link {
+    border-radius: 8px 8px 0 0;
+    font-weight: 600;
+    color: #495057;
+}
+
+.nav-tabs .nav-link.active {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border-color: #007bff;
+}
+
+/* Efectos hover para elementos interactivos */
+.table th:hover::after {
+    content: "↕";
+    float: right;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Animación de carga de datos */
+.loading-data {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading-data::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilos para validación de datos */
+.validation-error {
+    background-color: #fff5f5;
+    border-left: 4px solid #e53e3e;
+}
+
+.validation-warning {
+    background-color: #fffbf0;
+    border-left: 4px solid #dd6b20;
+}
+
+.validation-success {
+    background-color: #f0fff4;
+    border-left: 4px solid #38a169;
+}/* Estilos 
+para Clasificaciones Tributarias */
+
+/* Sección de filtros */
+.filter-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: -1rem;
+}
+
+/* Filtros de tabla */
+.table-responsive .row {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.table-responsive .form-control-sm {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.table-responsive .form-label.small {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.25rem;
+}
+
+/* Tabla de resultados mejorada */
+.table {
+    font-size: 0.9rem;
+}
+
+.table th {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: 1rem 0.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.table th:hover {
+    background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+}
+
+/* Indicadores de ordenamiento */
+.sort-indicator {
+    font-size: 0.8rem;
+    color: #adb5bd;
+    transition: all 0.2s ease;
+}
+
+.sort-indicator.active {
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Filas de registros */
+.registro-fila {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.registro-fila:hover {
+    background-color: #e3f2fd !important;
+    transform: scale(1.001);
+}
+
+.registro-seleccionado {
+    background-color: #bbdefb !important;
+    border-left: 4px solid #2196f3;
+    font-weight: 500;
+}
+
+.registro-con-factor {
+    border-left: 3px solid #28a745;
+}
+
+.registro-par {
+    background-color: #fafafa;
+}
+
+/* Información del registro seleccionado */
+.registro-info {
+    border-left: 4px solid #2196f3;
+    animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Botones de acción */
+.btn-action {
+    min-width: 120px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    margin: 0.25rem;
+}
+
+.btn-action:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Paginación mejorada */
+.pagination {
+    margin: 0;
+}
+
+.page-link {
+    border-radius: 6px;
+    margin: 0 2px;
+    font-weight: 500;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.page-link:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+    color: #495057;
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border-color: #007bff;
+    color: white;
+    font-weight: 600;
+}
+
+.page-item.disabled .page-link {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Loading overlay */
+#loading-overlay {
+    backdrop-filter: blur(2px);
+}
+
+.loading-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.loading-text {
+    font-weight: 600;
+    color: #495057;
+}
+
+/* Modal de opciones */
+.list-group-item {
+    border: none;
+    border-radius: 6px !important;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.list-group-item i {
+    width: 20px;
+    margin-right: 0.75rem;
+}
+
+/* Filtros avanzados */
+.form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Estados de validación */
+.is-valid {
+    border-color: #28a745;
+    background-color: #d4edda;
+}
+
+.is-invalid {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+/* Tooltips para encabezados */
+.table th[title] {
+    position: relative;
+}
+
+.table th[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+/* Responsive mejoras */
+@media (max-width: 1200px) {
+    .table {
+        font-size: 0.8rem;
+    }
+    
+    .btn-action {
+        min-width: 100px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-section {
+        padding: 1rem;
+    }
+    
+    .table-responsive .row {
+        padding: 0.5rem;
+    }
+    
+    .btn-action {
+        width: 100%;
+        margin: 0.25rem 0;
+    }
+    
+    .d-flex.justify-content-between {
+        flex-direction: column;
+    }
+    
+    .d-flex.gap-2 {
+        flex-direction: column;
+        gap: 0.5rem !important;
+    }
+    
+    .registro-info {
+        margin: 0.5rem 0;
+        padding: 0.75rem;
+    }
+    
+    .pagination {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .page-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Animaciones para cambios de estado */
+.registro-fila {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Estados de carga para tabla */
+.table-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.table-loading tbody::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Indicadores de estado */
+.status-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-procesado {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Mejoras de accesibilidad */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Estilos para campos de búsqueda rápida */
+.search-highlight {
+    background-color: #fff3cd;
+    font-weight: bold;
+}
+
+/* Indicadores de filtros activos */
+.filter-active {
+    border-left: 3px solid #007bff;
+    background-color: #e3f2fd;
+}
+
+.filter-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Estilos para exportación */
+.export-progress {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+}
+
+/* Mejoras visuales para selects */
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+}
+
+.form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Estilos para checkboxes */
+.form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.form-check-input:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Transiciones suaves */
+* {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Estilos para datos numéricos */
+.numeric-cell {
+    font-family: 'Courier New', monospace;
+    text-align: right;
+}
+
+.zero-value {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.positive-value {
+    color: #28a745;
+    font-weight: 500;
+}
+
+.negative-value {
+    color: #dc3545;
+    font-weight: 500;
+}

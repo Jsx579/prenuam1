@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Cargar Archivo - NUAM</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex ms-auto" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
+                    <button class="btn btn-light" type="submit">Buscar</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="display-5 fw-bold text-primary">NUAM</h1>
+                <p class="text-muted fs-5">Por favor ingrese el archivo</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="container mt-4 mb-5">
+        <div class="card shadow-lg border-0 rounded-3">
+            <!-- Card Header -->
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0 fw-semibold">
+                    <i class="bi bi-file-earmark-arrow-up"></i> Cargar Archivo Carga X Factor
+                </h5>
+            </div>
+
+            <div class="card-body p-4">
+                <!-- Tabs -->
+                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="archivo-tab" data-bs-toggle="tab" data-bs-target="#archivo" type="button" role="tab">
+                            <i class="bi bi-folder"></i> Archivo
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="archivo" role="tabpanel">
+                        
+                        <!-- Tabla de datos -->
+                        <div class="table-responsive mb-4">
+                            <table id="tablaDatos" class="table table-hover table-bordered align-middle">
+                                <thead class="table-light">
+                                    <tr class="text-center">
+                                        <th class="fw-semibold">EJERCICIO</th>
+                                        <th class="fw-semibold">MERCADO</th>
+                                        <th class="fw-semibold">NE...</th>
+                                        <th class="fw-semibold">FEC_PAGO</th>
+                                        <th class="fw-semibold">SEC_EVE</th>
+                                        <th class="fw-semibold">DESCRIPCION</th>
+                                        <th class="fw-semibold">F8 - Monto</th>
+                                        <th class="fw-semibold">F9 - Monto</th>
+                                        <th class="fw-semibold">F10 - Monto</th>
+                                        <th class="fw-semibold">F11 - Monto</th>
+                                        <th class="fw-semibold">F12 - REX</th>
+                                        <th class="fw-semibold">F13 - REX</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="12" class="text-center text-muted py-5">
+                                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                            <span class="fs-5">No hay registros</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Sección de carga de archivo -->
+                        <div class="row align-items-center mb-4 p-3 bg-light rounded-3">
+                            <div class="col-md-8">
+                                <label for="archivoInput" class="form-label fw-semibold mb-2">
+                                    <i class="bi bi-paperclip"></i> Seleccionar archivo
+                                </label>
+                                <input type="file" id="archivoInput" class="form-control form-control-lg" accept=".xlsx,.xls,.csv">
+                                <div class="form-text">
+                                    Formatos permitidos: Excel (.xlsx, .xls) o CSV
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <button class="btn btn-outline-primary btn-lg mt-3" onclick="cargarArchivo()">
+                                    <i class="bi bi-upload"></i> Cargar Archivo
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Estado de carga (oculto por defecto) -->
+                        <div id="estadoCarga" class="alert alert-info d-none" role="alert">
+                            <strong>Procesando archivo...</strong> Por favor espere.
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <button class="btn btn-success btn-lg px-4" type="button">
+                                <i class="bi bi-save"></i> Grabar
+                            </button>
+                            <button class="btn btn-secondary btn-lg px-4" type="button">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </button>
+                            <a href="{% url 'FormatoArchivo' %}" class="btn btn-info btn-lg px-4 text-white" target="_blank">
+                                <i class="bi bi-eye"></i> Ver Formato
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-4 mt-auto">
+        <div class="container">
+            <ul class="nav justify-content-center mb-2">
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Prototipo/js/cargaArchivo.js' %}"></script>
+</body>
+</html>

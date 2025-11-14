@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>{{ titulo }} - NUAM</title>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="d-flex align-items-center ms-auto">
+                    <a href="{% url 'CerrarSesion' %}" class="btn btn-outline-light btn-sm">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}
+        <div class="container mt-4 flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <a href="{% url 'PanelAuditor' %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver al Panel
+                    </a>
+                </div>
+            </div>
+            
+            <h2 class="text-primary fw-bold mb-4">{{ titulo }}</h2>
+
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="card shadow-sm border-0 rounded-3 mb-4">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h5 class="mb-0 fw-semibold">
+                                <i class="bi bi-info-circle"></i> Detalles de la Calificación
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="mb-3">
+                                <label class="text-muted small mb-1">Instrumento</label>
+                                <p class="fw-bold mb-0">{{ calificacion.instrumento }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted small mb-1">Mercado</label>
+                                <p class="fw-bold mb-0">{{ calificacion.mercado }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted small mb-1">Valor Histórico</label>
+                                <p class="fw-bold mb-0">${{ calificacion.valor_historico }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted small mb-1">Creador</label>
+                                <p class="fw-bold mb-0">{{ calificacion.usuario_creador.nombre }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted small mb-1">Fecha Creación</label>
+                                <p class="fw-bold mb-0">{{ calificacion.fecha_creacion }}</p>
+                            </div>
+                            <div class="mb-0">
+                                <label class="text-muted small mb-1">Estado Actual</label>
+                                <p class="mb-0">
+                                    <span class="badge fs-6
+                                        {% if calificacion.estado == 'Aprobada' %}bg-success
+                                        {% elif calificacion.estado == 'Rechazada' %}bg-danger
+                                        {% else %}bg-warning text-dark{% endif %}">
+                                        {{ calificacion.estado }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm border-0 rounded-3">
+                        <div class="card-header bg-secondary text-white py-3">
+                            <h5 class="mb-0 fw-semibold">
+                                <i class="bi bi-clipboard-check"></i> Acciones de Auditoría
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            {% if calificacion.estado == 'Aprobada' or calificacion.estado == 'Rechazada' %}
+                                <div class="alert alert-info mb-0">
+                                    <i class="bi bi-info-circle"></i> Esta calificación ya fue auditada.
+                                </div>
+                            {% else %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <p class="mb-3">Cambiar el estado de esta calificación:</p>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" name="nuevo_estado" value="Aprobada" class="btn btn-success btn-lg">
+                                            <i class="bi bi-check-circle"></i> Aprobar
+                                        </button>
+                                        <button type="submit" name="nuevo_estado" value="Rechazada" class="btn btn-danger btn-lg">
+                                            <i class="bi bi-x-circle"></i> Rechazar
+                                        </button>
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="card shadow-sm border-0 rounded-3">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h5 class="mb-0 fw-semibold">
+                                <i class="bi bi-calculator"></i> Valores de los Factores (29 Factores)
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form>
+                                {% csrf_token %}
+                                {{ formset.management_form }}
+                                <div class="row g-2">
+                                {% for factor_form in formset %}
+                                    <div class="col-md-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text bg-light fw-semibold" style="min-width: 120px;">
+                                                {{ factor_form.instance.nombre }}
+                                            </span>
+                                            {{ factor_form.id }}
+                                            {{ factor_form.nombre }}
+                                            {{ factor_form.valor }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-white border-top py-4 mt-5">
+            <div class="container">
+                <ul class="nav justify-content-center mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" href="https://www.nuam.com/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" href="tel:+562 2399 3000">Contacto</a>
+                    </li>
+                </ul>
+                <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    {% endblock %}
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

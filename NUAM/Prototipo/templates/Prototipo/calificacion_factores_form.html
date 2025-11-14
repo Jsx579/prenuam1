@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>{{ titulo }} - NUAM</title>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="d-flex align-items-center ms-auto">
+                    <a href="{% url 'CerrarSesion' %}" class="btn btn-outline-light btn-sm">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 flex-grow-1">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white border-bottom">
+                <h3 class="mb-0 text-primary">{{ titulo }}</h3>
+            </div>
+            <div class="card-body">
+                <p class="lead text-muted">A continuación, ingrese o modifique el valor de los 29 factores para la calificación del emisor <strong>{{ calificacion.emisor }}</strong>.</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% if formset.non_form_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Error de Validación Global:</strong>
+                            <ul>
+                                {% for error in formset.non_form_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    {{ formset.management_form }}
+                    
+                    <div class="table-responsive mt-4">
+                        <table class="table table-bordered table-striped align-middle">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th style="width: 30%;">Factor</th>
+                                    <th style="width: 70%;">Valor (Máx. 8 decimales)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for form in formset %}
+                                <tr>
+                                    <td>
+                                        {{ form.nombre }} 
+                                        
+                                        {% for error in form.nombre.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                                    </td>
+                                    
+                                    <td>
+                                        {{ form.valor }}
+                                        
+                                        {% for error in form.valor.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                                        
+                                        {{ form.id }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <button type="submit" class="btn btn-success btn-lg px-5">
+                            <i class="bi bi-save"></i> GUARDAR CAMBIOS
+                        </button>
+                        <a href="{% url 'PanelCorredor' %}" class="btn btn-secondary btn-lg px-5">
+                            <i class="bi bi-x-circle"></i> CANCELAR
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-top py-4 mt-auto">
+        <div class="container">
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

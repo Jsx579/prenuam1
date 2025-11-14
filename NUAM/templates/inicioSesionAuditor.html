@@ -1,0 +1,222 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Inicio de Sesión Auditor - NUAM</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark auditor-header shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+                <span><i class="bi bi-shield-check"></i> Auditor</span>
+            </a>
+            <form class="d-flex ms-auto" role="search">
+                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
+                <button class="btn btn-light" type="submit">Buscar</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-5 col-lg-4">
+                <!-- Card del formulario -->
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5">
+                        <!-- Logo/Título -->
+                        <div class="text-center mb-4">
+                            <div class="mb-3">
+                                <span class="auditor-badge">
+                                    <i class="bi bi-shield-check fs-4"></i>
+                                    <span>Acceso Auditor</span>
+                                </span>
+                            </div>
+                            <h1 class="display-4 fw-bold text-warning mb-2">NUAM</h1>
+                            <p class="text-muted">
+                                {% if user.is_authenticated %}
+                                    Bienvenido, {{ user.username }}
+                                {% else %}
+                                    Portal exclusivo para auditores
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <!-- Alerta informativa -->
+                        <div class="alert alert-warning border-0 mb-4" role="alert">
+                            <i class="bi bi-info-circle"></i> 
+                            <small><strong>Nota:</strong> Este acceso es exclusivo para personal de auditoría autorizado.</small>
+                        </div>
+
+                        <!-- Mensajes de error del formulario -->
+                        {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Error:</strong> Credenciales inválidas o acceso no autorizado.
+                        </div>
+                        {% endif %}
+
+                        <!-- Formulario Django -->
+                        <form method="post" id="loginForm" novalidate>
+                            {% csrf_token %}
+                            
+                            <!-- Campo Username -->
+                            <div class="mb-3">
+                                <label for="{{ form.username.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="bi bi-person-badge"></i> Usuario Auditor
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="{{ form.username.name }}"
+                                    class="form-control form-control-lg {% if form.username.errors %}is-invalid{% endif %}" 
+                                    id="{{ form.username.id_for_label }}"
+                                    placeholder="ID de auditor"
+                                    value="{{ form.username.value|default:'' }}"
+                                    required
+                                    autocomplete="username"
+                                >
+                                {% if form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.username.errors.0 }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Campo Password -->
+                            <div class="mb-3">
+                                <label for="{{ form.password.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="bi bi-shield-lock"></i> Contraseña de Acceso
+                                </label>
+                                <div class="password-wrapper">
+                                    <input 
+                                        type="password" 
+                                        name="{{ form.password.name }}"
+                                        class="form-control form-control-lg {% if form.password.errors %}is-invalid{% endif %}" 
+                                        id="{{ form.password.id_for_label }}"
+                                        placeholder="••••••••"
+                                        required
+                                        autocomplete="current-password"
+                                    >
+                                    <button 
+                                        type="button" 
+                                        class="toggle-password" 
+                                        id="togglePassword" 
+                                        aria-label="Mostrar contraseña"
+                                    >
+                                        <span id="passwordIcon">👁️</span>
+                                    </button>
+                                </div>
+                                {% if form.password.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.password.errors.0 }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Recordar sesión -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input 
+                                        type="checkbox" 
+                                        class="form-check-input" 
+                                        id="rememberMe"
+                                        name="remember"
+                                    >
+                                    <label class="form-check-label" for="rememberMe">
+                                        Mantener sesión activa (no recomendado en equipos compartidos)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Campo oculto para identificar tipo de usuario -->
+                            <input type="hidden" name="user_type" value="auditor">
+
+                            <!-- Botón de envío -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-auditor btn-lg">
+                                    <i class="bi bi-shield-check"></i> Acceder como Auditor
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Enlaces adicionales -->
+                        <div class="text-center mt-4">
+                            <a href="#" class="text-decoration-none small text-warning">
+                                <i class="bi bi-question-circle"></i> ¿Problemas de acceso?
+                            </a>
+                        </div>
+
+                        <!-- Separador -->
+                        <hr class="my-4">
+
+                        <!-- Enlaces -->
+                        <div class="text-center">
+                            <small class="text-muted">
+                                ¿No tienes cuenta de auditor? 
+                                <a href="{% url 'RegistroAuditor' %}" class="text-warning fw-semibold text-decoration-none">
+                                    Regístrate como auditor
+                                </a>
+                            </small>
+                            <br>
+                            <small class="text-muted mt-2 d-block">
+                                ¿Eres usuario regular? 
+                                <a href="{% url 'InicioSesion' %}" class="text-primary fw-semibold text-decoration-none">
+                                    Iniciar sesión normal
+                                </a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer info con advertencia -->
+                <div class="text-center mt-3">
+                    <div class="alert alert-warning border-0 shadow-sm py-2" role="alert">
+                        <small>
+                            <i class="bi bi-exclamation-triangle"></i> 
+                            <strong>Advertencia:</strong> El acceso no autorizado está penalizado por ley.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-3 mt-auto">
+        <div class="container">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Prototipo/js/login.js' %}"></script>
+    <script>
+        // Script adicional para validación de auditor
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const username = document.querySelector('input[name="{{ form.username.name }}"]').value;
+            
+            // Validación adicional (opcional)
+            if (username && !username.includes('@')) {
+                console.log('Validando credenciales de auditor...');
+            }
+        });
+    </script>
+</body>
+</html>

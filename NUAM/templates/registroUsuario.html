@@ -1,0 +1,286 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Registro de Usuario - NUAM</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <form class="d-flex ms-auto" role="search">
+                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
+                <button class="btn btn-light" type="submit">Buscar</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh; padding: 2rem 0;">
+            <div class="col-md-6 col-lg-5">
+                <!-- Card del formulario -->
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5">
+                        <!-- Logo/Título -->
+                        <div class="text-center mb-4">
+                            <h1 class="display-5 fw-bold text-primary mb-2">Registro</h1>
+                            <p class="text-muted">Crea tu cuenta en NUAM</p>
+                        </div>
+
+                        <!-- Mensajes de error/éxito -->
+                        {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <!-- Formulario de registro -->
+                        <form method="post" id="registroForm" novalidate>
+                            {% csrf_token %}
+                            
+                            <!-- Nombre de usuario -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-semibold">
+                                    <i class="bi bi-person"></i> Nombre de usuario
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="username"
+                                    class="form-control form-control-lg {% if form.username.errors %}is-invalid{% endif %}" 
+                                    id="username"
+                                    placeholder="Tu nombre de usuario"
+                                    value="{{ form.username.value|default:'' }}"
+                                    required
+                                >
+                                {% if form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.username.errors.0 }}
+                                </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    Elige un nombre único para tu cuenta
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-semibold">
+                                    <i class="bi bi-envelope"></i> Correo electrónico
+                                </label>
+                                <input 
+                                    type="email" 
+                                    name="email"
+                                    class="form-control form-control-lg {% if form.email.errors %}is-invalid{% endif %}" 
+                                    id="email"
+                                    placeholder="tu@correo.com"
+                                    value="{{ form.email.value|default:'' }}"
+                                    required
+                                >
+                                {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.email.errors.0 }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Nombre -->
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label fw-semibold">
+                                    <i class="bi bi-person-badge"></i> Nombre
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="first_name"
+                                    class="form-control form-control-lg" 
+                                    id="first_name"
+                                    placeholder="Tu nombre"
+                                    value="{{ form.first_name.value|default:'' }}"
+                                >
+                            </div>
+
+                            <!-- Apellido -->
+                            <div class="mb-3">
+                                <label for="last_name" class="form-label fw-semibold">
+                                    <i class="bi bi-person-badge"></i> Apellido
+                                </label>
+                                <input 
+                                    type="text" 
+                                    name="last_name"
+                                    class="form-control form-control-lg" 
+                                    id="last_name"
+                                    placeholder="Tu apellido"
+                                    value="{{ form.last_name.value|default:'' }}"
+                                >
+                            </div>
+
+                            <!-- Contraseña -->
+                            <div class="mb-3">
+                                <label for="password1" class="form-label fw-semibold">
+                                    <i class="bi bi-lock"></i> Contraseña
+                                </label>
+                                <div class="password-wrapper">
+                                    <input 
+                                        type="password" 
+                                        name="password1"
+                                        class="form-control form-control-lg {% if form.password1.errors %}is-invalid{% endif %}" 
+                                        id="password1"
+                                        placeholder="••••••••"
+                                        required
+                                    >
+                                    <button 
+                                        type="button" 
+                                        class="toggle-password" 
+                                        onclick="togglePassword('password1', 'icon1')"
+                                        aria-label="Mostrar contraseña"
+                                    >
+                                        <span id="icon1">👁️</span>
+                                    </button>
+                                </div>
+                                {% if form.password1.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.password1.errors.0 }}
+                                </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    Mínimo 8 caracteres, con letras y números
+                                </div>
+                            </div>
+
+                            <!-- Confirmar contraseña -->
+                            <div class="mb-4">
+                                <label for="password2" class="form-label fw-semibold">
+                                    <i class="bi bi-lock-fill"></i> Confirmar contraseña
+                                </label>
+                                <div class="password-wrapper">
+                                    <input 
+                                        type="password" 
+                                        name="password2"
+                                        class="form-control form-control-lg {% if form.password2.errors %}is-invalid{% endif %}" 
+                                        id="password2"
+                                        placeholder="••••••••"
+                                        required
+                                    >
+                                    <button 
+                                        type="button" 
+                                        class="toggle-password" 
+                                        onclick="togglePassword('password2', 'icon2')"
+                                        aria-label="Mostrar contraseña"
+                                    >
+                                        <span id="icon2">👁️</span>
+                                    </button>
+                                </div>
+                                {% if form.password2.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.password2.errors.0 }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Términos y condiciones -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input 
+                                        type="checkbox" 
+                                        class="form-check-input" 
+                                        id="terminos"
+                                        required
+                                    >
+                                    <label class="form-check-label" for="terminos">
+                                        Acepto los <a href="#" class="text-primary">términos y condiciones</a>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Botón de registro -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-person-plus"></i> Crear cuenta
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Separador -->
+                        <hr class="my-4">
+
+                        <!-- Link a inicio de sesión -->
+                        <div class="text-center">
+                            <small class="text-muted">
+                                ¿Ya tienes cuenta? 
+                                <a href="{% url 'InicioSesion' %}" class="text-primary fw-semibold text-decoration-none">
+                                    Iniciar sesión
+                                </a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-3 mt-auto">
+        <div class="container">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        // Función para mostrar/ocultar contraseña
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = ':v';
+            } else {
+                input.type = 'password';
+                icon.textContent = ';v';
+            }
+        }
+
+        // Validación del formulario
+        document.getElementById('registroForm').addEventListener('submit', function(e) {
+            const password1 = document.getElementById('password1').value;
+            const password2 = document.getElementById('password2').value;
+            const terminos = document.getElementById('terminos').checked;
+            
+            if (password1 !== password2) {
+                e.preventDefault();
+                alert('Las contraseñas no coinciden');
+                return false;
+            }
+            
+            if (!terminos) {
+                e.preventDefault();
+                alert('Debes aceptar los términos y condiciones');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

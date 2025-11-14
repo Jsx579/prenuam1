@@ -1,0 +1,257 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Prototipo/css/styles.css' %}">
+    <title>Reportes - NUAM</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'Bienvenida' %}">
+                <img src="{% static 'Prototipo/svg/6341953_logo_img_patrocinada-convertido-de-png.svg' %}" alt="NUAM Logo" height="40" class="me-2">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex ms-auto" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"/>
+                    <button class="btn btn-light" type="submit">Buscar</button>
+                </form>
+                <div class="d-flex align-items-center ms-lg-3">
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text me-3 text-white">
+                            <strong>{{ user.username }}</strong>
+                        </span>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="display-6 fw-bold text-primary">
+                    <i class="bi bi-flag"></i> Reportes dentro de la web
+                </h1>
+                <p class="text-muted">Envíanos tus comentarios, sugerencias o reporta problemas</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Card Principal -->
+                <div class="card shadow-lg border-0 rounded-3">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h5 class="mb-0 fw-semibold">
+                            <i class="bi bi-chat-left-text"></i> Formulario de Reporte
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="formReporte">
+                            {% csrf_token %}
+                            
+                            <!-- Tipo de Reporte -->
+                            <div class="mb-4">
+                                <label for="tipoReporte" class="form-label fw-semibold">
+                                    <i class="bi bi-tag"></i> Tipo de Reporte
+                                </label>
+                                <select class="form-select form-select-lg" id="tipoReporte" name="tipoReporte" required>
+                                    <option value="">Seleccione el tipo de reporte</option>
+                                    <option value="error">🐛 Error o Bug</option>
+                                    <option value="sugerencia">💡 Sugerencia</option>
+                                    <option value="mejora">⚡ Mejora</option>
+                                    <option value="consulta">❓ Consulta</option>
+                                    <option value="otro">📝 Otro</option>
+                                </select>
+                                <div class="form-text">Selecciona la categoría que mejor describa tu reporte</div>
+                            </div>
+
+                            <!-- Asunto -->
+                            <div class="mb-4">
+                                <label for="asunto" class="form-label fw-semibold">
+                                    <i class="bi bi-pencil"></i> Asunto
+                                </label>
+                                <input 
+                                    type="text" 
+                                    class="form-control form-control-lg" 
+                                    id="asunto" 
+                                    name="asunto"
+                                    placeholder="Título breve del reporte"
+                                    maxlength="100"
+                                    required
+                                >
+                                <div class="form-text">
+                                    <span id="contadorAsunto">0</span>/100 caracteres
+                                </div>
+                            </div>
+
+                            <!-- Descripción del Reporte -->
+                            <div class="mb-4">
+                                <label for="reporte" class="form-label fw-semibold">
+                                    <i class="bi bi-file-text"></i> Descripción del Reporte
+                                </label>
+                                <textarea 
+                                    class="form-control form-control-lg" 
+                                    id="reporte" 
+                                    name="reporte"
+                                    rows="8"
+                                    placeholder="Describe tu reporte aquí. Incluye todos los detalles relevantes..."
+                                    maxlength="1000"
+                                    required
+                                ></textarea>
+                                <div class="form-text">
+                                    <span id="contadorReporte">0</span>/1000 caracteres
+                                </div>
+                            </div>
+
+                            <!-- Prioridad -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-exclamation-triangle"></i> Prioridad
+                                </label>
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" name="prioridad" id="prioridadBaja" value="baja" checked>
+                                    <label class="btn btn-outline-success" for="prioridadBaja">
+                                        <i class="bi bi-arrow-down-circle"></i> Baja
+                                    </label>
+                                    
+                                    <input type="radio" class="btn-check" name="prioridad" id="prioridadMedia" value="media">
+                                    <label class="btn btn-outline-warning" for="prioridadMedia">
+                                        <i class="bi bi-dash-circle"></i> Media
+                                    </label>
+                                    
+                                    <input type="radio" class="btn-check" name="prioridad" id="prioridadAlta" value="alta">
+                                    <label class="btn btn-outline-danger" for="prioridadAlta">
+                                        <i class="bi bi-arrow-up-circle"></i> Alta
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Email de contacto (opcional) -->
+                            <div class="mb-4">
+                                <label for="email" class="form-label fw-semibold">
+                                    <i class="bi bi-envelope"></i> Email de Contacto (Opcional)
+                                </label>
+                                <input 
+                                    type="email" 
+                                    class="form-control form-control-lg" 
+                                    id="email" 
+                                    name="email"
+                                    placeholder="tu@email.com"
+                                >
+                                <div class="form-text">Si deseas recibir una respuesta, déjanos tu email</div>
+                            </div>
+
+                            <!-- Mensaje de confirmación -->
+                            <div class="alert alert-success alert-dismissible fade d-none" role="alert" id="mensajeConfirmacion">
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                <strong>¡Gracias por tu reporte!</strong> Lo hemos recibido correctamente y será revisado pronto.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+
+                            <!-- Mensaje de error -->
+                            <div class="alert alert-danger alert-dismissible fade d-none" role="alert" id="mensajeError">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <strong>Error:</strong> <span id="textoError"></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                                <button type="button" class="btn btn-secondary btn-lg px-5" id="btnLimpiar">
+                                    <i class="bi bi-x-circle"></i> Limpiar
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg px-5" id="btnEnviar">
+                                    <i class="bi bi-send"></i> Enviar Reporte
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Card de Información -->
+                <div class="card shadow border-0 rounded-3 mt-4">
+                    <div class="card-body p-4">
+                        <h6 class="fw-bold text-primary mb-3">
+                            <i class="bi bi-info-circle"></i> Información Importante
+                        </h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Tu reporte será revisado por nuestro equipo técnico
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Responderemos en un plazo de 24-48 horas hábiles
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Incluye capturas de pantalla si es posible (próximamente)
+                            </li>
+                            <li class="mb-0">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Para urgencias, contacta directamente al soporte técnico
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Historial de Reportes (si el usuario está autenticado) -->
+                {% if user.is_authenticated %}
+                <div class="card shadow border-0 rounded-3 mt-4">
+                    <div class="card-header bg-secondary text-white py-3">
+                        <h6 class="mb-0 fw-semibold">
+                            <i class="bi bi-clock-history"></i> Mis Reportes Recientes
+                        </h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush" id="historialReportes">
+                            <div class="list-group-item text-center text-muted py-4">
+                                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                                No hay reportes previos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-4 mt-auto">
+        <div class="container">
+            <ul class="nav justify-content-center mb-2">
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.nuam.com/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="https://www.bolsadesantiago.com/mercado_en_vivo">Bolsa en vivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="tel:+562 2399 3000">Contacto</a>
+                </li>
+            </ul>
+            <p class="text-center text-muted small mb-0">© 2024 NUAM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'Prototipo/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Prototipo/js/reportes.js' %}"></script>
+</body>
+</html>
